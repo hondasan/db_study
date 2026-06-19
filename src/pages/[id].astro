@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 // 前後の記事へのリンク用のデータを取得
 const posts = await getCollection('db-study');
@@ -25,6 +26,7 @@ const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : nul
 
 <Layout title={post.data.title} description={post.data.description} currentId={post.id}>
   <Sidebar slot="sidebar" currentId={post.id} />
+  <TableOfContents headings={headings} slot="toc" />
 
   <div class="article-header">
     <div class="article-meta">

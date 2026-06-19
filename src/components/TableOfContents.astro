@@ -1,0 +1,124 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// 目次が空の場合は何も表示しない
+if (!headings || headings.length === 0) return null;
+
+// h2 と h3 のみに絞り込む
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<nav class="toc-container">
+  <h2 class="toc-header">このページの内容</h2>
+  <ul class="toc-list">
+    {filteredHeadings.map((heading) => (
+      <li class={`toc-item depth-${heading.depth}`}>
+        <a href={`#${heading.slug}`} class="toc-link">
+          {heading.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  const setupTOCActiveLink = () => {
+    const headings = Array.from(document.querySelectorAll('article h2, article h3'));
+    const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+    
+    if (headings.length === 0 || tocLinks.length === 0) return;
+
+    // スクロール監視のための IntersectionObserver
+    const observerOptions = {
+      root: null,
+      rootMargin: '-100px 0px -70% 0px', // 上部で引っかかるように設定
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      // 交差している見出しのうち、最も上にあるものを探す
+      const visibleEntries = entries.filter((e) => e.isIntersecting);
+      
+      if (visibleEntries.length > 0) {
+        // アクティブにする見出しのIDを取得
+        const activeId = visibleEntries[0].target.getAttribute('id');
+        
+        tocLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          if (href === `#${activeId}`) {
+            link.classList.add('active');
+            
+            // 目次内でのスクロール位置を調整（目次が長い場合）
+            link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    }, observerOptions);
+
+    headings.forEach((heading) => observer.observe(heading));
+  };
+
+  // 初期セットアップ
+  setupTOCActiveLink();
+  // Astroの遷移イベントに対応
+  document.addEventListener('astro:page-load', setupTOCActiveLink);
+</script>
+
+<style>
+  .toc-container {
+    font-size: 0.85rem;
+  }
+
+  .toc-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+  }
+
+  .toc-item {
+    line-height: 1.4;
+  }
+
+  .toc-item.depth-3 {
+    padding-left: 0.85rem; /* H3はインデントする */
+  }
+
+  .toc-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+    display: inline-block;
+  }
+
+  .toc-link:hover {
+    color: var(--text-primary);
+  }
+
+  .toc-link.active {
+    color: var(--accent-color);
+    font-weight: 500;
+  }
+</style>

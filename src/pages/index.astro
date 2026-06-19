@@ -1,266 +1,165 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('db-study');
 posts.sort((a, b) => a.data.order - b.data.order);
 
-// おすすめ記事として最初の3件を取得
-const featuredPosts = posts.slice(0, 3);
+// 静的な見出しの定義 (TOC用)
+const headings = [
+  { depth: 2, slug: 'about', text: '本サイトについて' },
+  { depth: 2, slug: 'topics', text: '主要なトピック' },
+  { depth: 2, slug: 'writing-guide', text: '執筆・編集ガイド' }
+];
 ---
 
-<Layout title="データベース学習サイト db_study">
+<Layout title="データベース学習ガイド (Overview)">
   <Sidebar slot="sidebar" />
+  <TableOfContents headings={headings} slot="toc" />
 
-  <div class="welcome-container">
-    <div class="welcome-header">
-      <span class="welcome-icon animate-bounce">🗄️</span>
-      <h1 class="welcome-title">データベース学習へようこそ</h1>
-      <p class="welcome-subtitle">SQLの基礎から実践的なテーブル設計まで、Claudeライクな洗練された環境で学びましょう。</p>
-    </div>
-
-    <div class="featured-section">
-      <h2 class="section-title">学習を始める</h2>
-      <div class="card-grid">
-        {featuredPosts.map((post) => (
-          <a href={`/${post.slug}`} class="featured-card">
-            <div class="card-category">{post.data.category}</div>
-            <h3 class="card-title">{post.data.title}</h3>
-            {post.data.description && <p class="card-desc">{post.data.description}</p>}
-            <div class="card-footer">
-              <span>読む &rarr;</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </div>
-
-    <div class="guide-section">
-      <h2 class="section-title">本サイトの使い方</h2>
-      <div class="guide-grid">
-        <div class="guide-item">
-          <div class="guide-num">1</div>
-          <div class="guide-content">
-            <h4>左のサイドバーから記事を選択</h4>
-            <p>学びたいトピックを順番に進めることも、気になる記事をピンポイントで読むこともできます。</p>
-          </div>
-        </div>
-        <div class="guide-item">
-          <div class="guide-num">2</div>
-          <div class="guide-content">
-            <h4>SQLシミュレータで練習</h4>
-            <p>ページ下部の入力欄にSQLを入力し、Enterキーを押すと、仮想のテーブル（users, orders）を対象にしたクエリ結果がすぐに確認できます。</p>
-          </div>
-        </div>
-        <div class="guide-item">
-          <div class="guide-num">3</div>
-          <div class="guide-content">
-            <h4>自分の記事を追加</h4>
-            <p>ご自身でMarkdownファイル（<code>src/content/db-study/</code>）を追加するだけで、自動的にメニューとページが追加されます。</p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="overview-header">
+    <h1 class="page-title">データベース学習ガイド</h1>
+    <p class="lead-text">
+      このサイトは、データベースとSQLの基本概念から実践的なクエリ、テーブル結合、さらには設計手法までを体系的に学習するためのテクニカルドキュメントです。
+    </p>
   </div>
+
+  <section id="about" class="doc-section">
+    <h2>本サイトについて</h2>
+    <p>
+      データベース（RDB）は現代のソフトウェア開発において不可欠なインフラです。本ガイドでは、難しい数式や複雑な理論を排除し、<strong>「クエリが書けること」「設計がイメージできること」</strong>に焦点を当てています。
+    </p>
+    <p>
+      左側のナビゲーションメニューから各トピックを選択して、学習を進めてください。
+    </p>
+  </section>
+
+  <section id="topics" class="doc-section">
+    <h2>主要なトピック</h2>
+    <div class="topic-list">
+      {posts.map((post) => (
+        <div class="topic-item">
+          <a href={`/${post.id}`} class="topic-title-link">
+            {post.data.title}
+          </a>
+          <p class="topic-description">{post.data.description}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="writing-guide" class="doc-section">
+    <h2>執筆・編集ガイド</h2>
+    <p>
+      記事のコンテンツはご自身でMarkdownファイルを追加・編集することで簡単に拡張できます。
+    </p>
+    <p>
+      記事を追加するには、<code>src/content/db-study/</code> ディレクトリに <code>.md</code> ファイルを作成し、以下のようにフロントマターを記述します。
+    </p>
+    <pre><code class="language-markdown">---
+title: "記事のタイトル"
+description: "記事の概要"
+order: 4
+category: "基本クエリ"
+---</code></pre>
+    <p>
+      ファイルを保存し、GitHubにプッシュ（<code>git push</code>）すると、自動的にビルドが行われ、GitHub Pages上の公開サイトに新しいドキュメントとサイドバーメニューが即座に反映されます。
+    </p>
+  </section>
 </Layout>
 
 <style>
-  .welcome-container {
-    padding: 2rem 0;
-    animation: fadeIn 0.5s ease-out;
+  .overview-header {
+    margin-bottom: 3rem;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .welcome-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .welcome-icon {
-    font-size: 4rem;
-    display: inline-block;
-    margin-bottom: 1.5rem;
-  }
-
-  .animate-bounce {
-    animation: bounce 2s infinite;
-  }
-
-  @keyframes bounce {
-    0%, 100% {
-      transform: translateY(-5%);
-      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    }
-    50% {
-      transform: translateY(0);
-      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    }
-  }
-
-  .welcome-title {
+  .page-title {
+    font-family: var(--font-serif);
     font-size: 2.75rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-    letter-spacing: -0.02em;
-  }
-
-  .welcome-subtitle {
-    font-size: 1.125rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
-
-  .section-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-top: 0;
-  }
-
-  /* カードグリッド */
-  .featured-section {
-    margin-bottom: 4rem;
-  }
-
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .featured-card {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
-  }
-
-  .featured-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent-color);
-    box-shadow: var(--shadow-md);
-  }
-
-  .card-category {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--accent-color);
-    margin-bottom: 0.5rem;
-  }
-
-  .card-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-  }
-
-  .card-desc {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-  }
-
-  .card-footer {
-    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-primary);
-    margin-top: auto;
-    transition: transform 0.2s ease;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
   }
 
-  .featured-card:hover .card-footer {
-    color: var(--accent-color);
+  .lead-text {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-family: var(--font-sans);
   }
 
-  /* ガイドセクション */
-  .guide-section {
-    background-color: var(--bg-secondary);
+  .doc-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .doc-section h2 {
+    font-family: var(--font-serif);
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .doc-section p {
+    margin-bottom: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .doc-section code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    background-color: var(--code-bg);
+    color: var(--text-primary);
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
     border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    padding: 2rem;
   }
 
-  .guide-grid {
+  /* トピックリスト */
+  .topic-list {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
 
-  .guide-item {
-    display: flex;
-    gap: 1.25rem;
-    align-items: flex-start;
+  .topic-item {
+    border-left: 2px solid var(--border-color);
+    padding-left: 1.25rem;
+    transition: border-color 0.2s ease;
   }
 
-  .guide-num {
-    background-color: var(--accent-color);
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  .topic-item:hover {
+    border-color: var(--accent-color);
   }
 
-  .guide-content h4 {
-    font-size: 1rem;
-    font-weight: 600;
+  .topic-title-link {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 500;
     color: var(--text-primary);
-    margin-bottom: 0.25rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.4rem;
+    transition: color 0.15s ease;
   }
 
-  .guide-content p {
-    font-size: 0.9rem;
+  .topic-title-link:hover {
+    color: var(--accent-color);
+  }
+
+  .topic-description {
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    margin-bottom: 0;
+    margin: 0;
     line-height: 1.5;
-  }
-
-  .guide-content code {
-    background-color: var(--bg-tertiary);
-    padding: 0.1rem 0.3rem;
-    border-radius: 0.25rem;
-    font-size: 0.85rem;
-  }
-
-  @media (max-width: 600px) {
-    .welcome-title {
-      font-size: 2rem;
-    }
   }
 </style>
