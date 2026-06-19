@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -6,6 +8,41 @@ interface Props {
 }
 
 const { title, description = "データベースとSQLを体系的に学ぶ学習サイト", currentId } = Astro.props;
+
+// Canonical URLの生成
+const siteUrl = 'https://hondasan.github.io';
+const basePath = '/db_study';
+// 末尾スラッシュを考慮しつつ正規化されたURLを構築
+const cleanPath = Astro.url.pathname.replace(/\/$/, "");
+const canonicalURL = new URL(cleanPath + "/", siteUrl + basePath);
+
+// 構造化データ (JSON-LD) の組み立て
+const isArticle = !!currentId;
+const jsonLd = isArticle
+  ? {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": title,
+      "description": description,
+      "url": canonicalURL.toString(),
+      "inLanguage": "ja",
+      "author": {
+        "@type": "Organization",
+        "name": "データベースの教科書"
+      }
+    }
+  : {
+      "@context": "https://schema.org",
+      "@type": "Book",
+      "name": "データベースの教科書",
+      "description": description,
+      "url": canonicalURL.toString(),
+      "inLanguage": "ja",
+      "author": {
+        "@type": "Organization",
+        "name": "データベースの教科書"
+      }
+    };
 ---
 
 <!doctype html>
@@ -17,10 +54,25 @@ const { title, description = "データベースとSQLを体系的に学ぶ学�
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title} - データベースの教科書</title>
-    <!-- Google Fonts: Newsreader (Serif), Inter (Sans-serif), Fira Code (Mono) -->
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- OGP メタタグ -->
+    <meta property="og:title" content={`${title} - データベースの教科書`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content={isArticle ? "article" : "website"} />
+    <meta property="og:site_name" content="データベースの教科書" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Lora (Serif), Outfit (Sans-serif), Noto Serif JP, Noto Sans JP -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- 構造化データ (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <div class="app-container">
@@ -89,29 +141,24 @@ const { title, description = "データベースとSQLを体系的に学ぶ学�
       } else {
         document.documentElement.classList.add('dark');
       }
-
       window.localStorage.setItem('theme', theme);
 
       const handleToggleClick = () => {
         const element = document.documentElement;
         element.classList.toggle("dark");
-
         const isDark = element.classList.contains("dark");
         localStorage.setItem("theme", isDark ? "dark" : "light");
       }
-
       document.getElementById("theme-toggle")?.addEventListener("click", handleToggleClick);
 
       // モバイルメニュー管理
       const menuToggle = document.getElementById('menu-toggle');
       const sidebarOverlay = document.getElementById('sidebar-overlay');
-      
       const toggleSidebar = () => {
         document.querySelector('.sidebar-container')?.classList.toggle('open');
         sidebarOverlay?.classList.toggle('active');
         document.body.classList.toggle('sidebar-open');
       };
-
       menuToggle?.addEventListener('click', toggleSidebar);
       sidebarOverlay?.addEventListener('click', toggleSidebar);
 
@@ -119,7 +166,6 @@ const { title, description = "データベースとSQLを体系的に学ぶ学�
       const setupCopyButtons = () => {
         document.querySelectorAll('pre').forEach((pre) => {
           if (pre.querySelector('.copy-code-btn')) return;
-
           const button = document.createElement('button');
           button.className = 'copy-code-btn';
           button.type = 'button';
@@ -128,20 +174,17 @@ const { title, description = "データベースとSQLを体系的に学ぶ学�
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             <span class="copy-status">コピー</span>
           `;
-
           pre.style.position = 'relative';
           pre.appendChild(button);
 
           button.addEventListener('click', async () => {
             const code = pre.querySelector('code');
             if (!code) return;
-
             try {
               await navigator.clipboard.writeText(code.innerText);
               button.classList.add('copied');
               const statusEl = button.querySelector('.copy-status');
               if (statusEl) statusEl.textContent = 'コピー完了';
-              
               setTimeout(() => {
                 button.classList.remove('copied');
                 if (statusEl) statusEl.textContent = 'コピー';
@@ -153,401 +196,51 @@ const { title, description = "データベースとSQLを体系的に学ぶ学�
         });
       };
 
+      // テーブル自動レスポンシブ化
+      const optimizeTables = () => {
+        document.querySelectorAll('article table').forEach((table) => {
+          // すでにコンテナで包まれている場合はスキップ
+          if (table.parentElement?.classList.contains('responsive-card-table') || table.parentElement?.classList.contains('responsive-simple-table') || table.parentElement?.classList.contains('table-container')) return;
+
+          // 列数を取得するためにヘッダーセルを判定
+          const headerCells = table.querySelectorAll('thead th, tr:first-child th, tr:first-child td');
+          const colsCount = headerCells.length;
+          
+          // テキスト量の概算
+          const textLength = table.textContent?.trim().length || 0;
+          
+          const container = document.createElement('div');
+          
+          // 4列以上、または文字数が多い場合にカード型に変換
+          if (colsCount >= 4 || textLength > 400) {
+            container.className = 'table-container responsive-card-table';
+            
+            const headers = Array.from(headerCells).map(cell => cell.textContent?.trim() || '');
+            const rows = table.querySelectorAll('tbody tr, tr:not(:first-child)');
+            
+            rows.forEach(row => {
+              const cells = row.querySelectorAll('td');
+              cells.forEach((cell, index) => {
+                if (headers[index]) {
+                  cell.setAttribute('data-label', headers[index]);
+                }
+              });
+            });
+          } else {
+            container.className = 'table-container responsive-simple-table';
+          }
+          
+          table.parentNode?.insertBefore(container, table);
+          container.appendChild(table);
+        });
+      };
+
       setupCopyButtons();
-      document.addEventListener('astro:page-load', setupCopyButtons);
+      optimizeTables();
+      document.addEventListener('astro:page-load', () => {
+        setupCopyButtons();
+        optimizeTables();
+      });
     </script>
   </body>
 </html>
-
-<style is:global>
-  /* Claude Docsライクな洗練されたCSS変数定義 */
-  :root {
-    --bg-primary: #FAF9F6; /* Claude Docsの極めて薄いウォームホワイト */
-    --bg-secondary: #FAF9F6; /* サイドバーも同色にしてシームレスに */
-    --bg-hover: #F3EFE9;
-    --bg-tertiary: #EBE5DB;
-    
-    --text-primary: #191919;
-    --text-secondary: #5C5852;
-    --text-muted: #8E8A83;
-    
-    --border-color: #ECEAE3; /* 非常に薄い境界線 */
-    --border-hover: #D7CFC2;
-    
-    --accent-color: #C97B63; /* Claude特有のレンガ・コッパー色 */
-    --accent-hover: #A05944;
-    --accent-light: #F7EBE7;
-    
-    --code-bg: #F5F2EC;
-    --code-text: #1E293B;
-    
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-    
-    --font-serif: 'Newsreader', 'Georgia', 'Noto Serif JP', serif;
-    --font-sans: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
-    --font-mono: 'Fira Code', monospace;
-    
-    --sidebar-width: 280px;
-    --toc-width: 240px;
-    --header-height: 60px;
-    --max-content-width: 800px;
-  }
-
-  .dark {
-    --bg-primary: #141413; /* Claude Docsのダーク背景 */
-    --bg-secondary: #141413;
-    --bg-hover: #1D1D1C;
-    --bg-tertiary: #262624;
-    
-    --text-primary: #ECEBE8;
-    --text-secondary: #9E9D97;
-    --text-muted: #72726E;
-    
-    --border-color: #242422;
-    --border-hover: #333330;
-    
-    --accent-color: #DA7B6C;
-    --accent-hover: #EC9A8D;
-    --accent-light: #2D1E1B;
-    
-    --code-bg: #1A1A19;
-    --code-text: #E2E8F0;
-  }
-
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html, body {
-    height: 100%;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  .app-container {
-    display: flex;
-    min-height: 100vh;
-    position: relative;
-  }
-
-  .main-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin-left: var(--sidebar-width);
-    transition: margin-left 0.2s ease;
-  }
-
-  /* ヘッダー (極めてミニマル) */
-  .app-header {
-    height: var(--header-height);
-    background-color: var(--bg-primary);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .menu-toggle-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-  }
-
-  .menu-toggle-btn:hover {
-    background-color: var(--bg-hover);
-  }
-
-  .header-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 1rem;
-    color: var(--text-primary);
-  }
-
-  .logo-emoji {
-    font-size: 1.1rem;
-  }
-
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .github-link, .theme-toggle-btn {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-  }
-
-  .github-link:hover, .theme-toggle-btn:hover {
-    background-color: var(--bg-hover);
-    color: var(--text-primary);
-  }
-
-  .sun-icon { display: block; }
-  .moon-icon { display: none; }
-  .dark .sun-icon { display: none; }
-  .dark .moon-icon { display: block; }
-
-  /* 3カラム（メインコンテンツ + 右目次）レイアウト定義 */
-  .layout-columns {
-    display: flex;
-    flex: 1;
-    position: relative;
-  }
-
-  .content-wrapper {
-    flex: 1;
-    padding: 3rem 3rem 6rem 3rem;
-    display: flex;
-    justify-content: center;
-    overflow-y: auto;
-  }
-
-  .prose-container {
-    width: 100%;
-    max-width: var(--max-content-width);
-    line-height: 1.7;
-    font-size: 1.05rem;
-  }
-
-  /* 目次 (右カラム) */
-  .toc-wrapper {
-    width: var(--toc-width);
-    flex-shrink: 0;
-    border-left: 1px solid var(--border-color);
-    padding: 3rem 1.5rem;
-    position: sticky;
-    top: var(--header-height);
-    height: calc(100vh - var(--header-height));
-    overflow-y: auto;
-    background-color: var(--bg-primary);
-    transition: border-color 0.2s ease;
-  }
-
-  /* Markdownタイポグラフィの刷新 (Newsreaderセリフ体の導入) */
-  .prose-container h1 {
-    font-family: var(--font-serif);
-    font-size: 2.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-  }
-
-  .prose-container h2 {
-    font-family: var(--font-serif);
-    font-size: 1.75rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-top: 3rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid var(--border-color);
-    line-height: 1.3;
-  }
-
-  .prose-container h3 {
-    font-family: var(--font-serif);
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-  }
-
-  .prose-container p {
-    margin-bottom: 1.25rem;
-    color: var(--text-secondary);
-  }
-
-  .prose-container ul, .prose-container ol {
-    margin-bottom: 1.25rem;
-    padding-left: 1.5rem;
-    color: var(--text-secondary);
-  }
-
-  .prose-container li {
-    margin-bottom: 0.5rem;
-  }
-
-  .prose-container strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-
-  .prose-container hr {
-    border: 0;
-    border-top: 1px solid var(--border-color);
-    margin: 3rem 0;
-  }
-
-  .prose-container blockquote {
-    border-left: 2px solid var(--accent-color);
-    padding-left: 1.25rem;
-    font-style: italic;
-    color: var(--text-secondary);
-    margin: 2rem 0;
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-  }
-
-  /* コードブロックのカスタマイズ */
-  .prose-container pre {
-    background-color: var(--code-bg) !important;
-    border: 1px solid var(--border-color);
-    border-radius: 0.5rem;
-    padding: 1.25rem;
-    overflow-x: auto;
-    margin: 1.75rem 0;
-  }
-
-  .prose-container pre.shiki {
-    background-color: var(--code-bg) !important;
-  }
-
-  .prose-container pre code span {
-    color: var(--shiki-light);
-  }
-  .dark .prose-container pre code span {
-    color: var(--shiki-dark) !important;
-  }
-
-  .prose-container code {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    background-color: var(--code-bg);
-    color: var(--text-primary);
-    padding: 0.15rem 0.35rem;
-    border-radius: 0.25rem;
-    border: 1px solid var(--border-color);
-  }
-
-  .prose-container pre code {
-    padding: 0;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    font-size: 0.85rem;
-  }
-
-  /* コピーボタンのスタイル */
-  .copy-code-btn {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 0.25rem;
-    padding: 0.2rem 0.4rem;
-    font-size: 0.7rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    opacity: 0;
-    transition: all 0.15s ease;
-    z-index: 10;
-  }
-
-  pre:hover .copy-code-btn {
-    opacity: 1;
-  }
-
-  .copy-code-btn:hover {
-    background-color: var(--bg-hover);
-    color: var(--text-primary);
-  }
-
-  .copy-code-btn.copied {
-    background-color: var(--accent-light);
-    color: var(--accent-color);
-    border-color: var(--accent-color);
-  }
-
-  .copy-icon {
-    flex-shrink: 0;
-  }
-
-  /* モバイルオーバーレイ */
-  .sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(1px);
-    z-index: 80;
-  }
-
-  /* レスポンシブ */
-  @media (max-width: 1100px) {
-    .toc-wrapper {
-      display: none; /* タブレット以下では右目次を非表示 */
-    }
-  }
-
-  @media (max-width: 900px) {
-    .main-container {
-      margin-left: 0;
-    }
-
-    .app-header {
-      padding: 0 1rem;
-    }
-
-    .menu-toggle-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .content-wrapper {
-      padding: 2rem 1.25rem;
-    }
-
-    .sidebar-overlay.active {
-      display: block;
-    }
-
-    body.sidebar-open {
-      overflow: hidden;
-    }
-  }
-</style>

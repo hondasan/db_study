@@ -1,0 +1,590 @@
+/* ==========================================================================
+   Design System & Global Styles (Warm Cream & Ink Blue)
+   ========================================================================== */
+
+:root {
+  /* 配色 (Warm Cream & Ink Blue) */
+  --bg-color: #FAF9F5;       /* 背景色（ウォームクリーム） */
+  --text-color: #2A2A2A;     /* 通常文字色（チャコール） */
+  --text-muted: #6B6B6B;     /* 補足用文字色（グレー） */
+  --accent-color: #1E3A60;   /* アクセント・見出し色（インクブルー） */
+  --accent-light: #DDE4EE;   /* ホバーやアクティブ背景（極薄のブルー） */
+  --border-color: #E5E0D8;   /* 境界線 */
+  --code-bg: #F3EFE7;        /* コードブロック背景 */
+  --code-text: #944040;      /* インラインコード文字色（赤系） */
+  --quote-bg: #F5F1E8;       /* 引用・補足背景 */
+  --quote-border: #D1C4B0;   /* 引用左境界線 */
+
+  /* フォント定義 */
+  --font-serif: "Lora", "游明朝", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+  --font-sans: "Outfit", "游ゴシック", "Yu Gothic", "Noto Sans JP", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* レイアウト定義 */
+  --sidebar-width: 260px;
+  --toc-width: 240px;
+  --header-height: 60px;
+  --max-content-width: 700px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* ダークモード (Warm Cream & Ink Blueの配色調和を維持) */
+.dark {
+  --bg-color: #161513;       /* 非常に暗いウォームグレー */
+  --text-color: #E2E0D9;     /* 明るいアイボリー */
+  --text-muted: #8E8A83;
+  --accent-color: #8EB3E2;   /* 明るいインクブルー */
+  --accent-light: #1A2E47;   /* 暗いインクブルー */
+  --border-color: #2D2A26;
+  --code-bg: #22201D;
+  --code-text: #E68585;
+  --quote-bg: #1B1A18;
+  --quote-border: #4D473E;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 16px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 900px) {
+  html, body {
+    font-size: 15px;
+  }
+}
+
+/* レイアウト */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.2s ease;
+}
+
+/* ヘッダー */
+.app-header {
+  height: var(--header-height);
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.menu-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.menu-toggle-btn:hover {
+  background-color: var(--accent-light);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.logo-emoji {
+  font-size: 1.1rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.github-link, .theme-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.github-link:hover, .theme-toggle-btn:hover {
+  background-color: var(--accent-light);
+  color: var(--text-color);
+}
+
+.sun-icon { display: block; }
+.moon-icon { display: none; }
+.dark .sun-icon { display: none; }
+.dark .moon-icon { display: block; }
+
+/* 3カラムレイアウト */
+.layout-columns {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 3rem 3rem 6rem 3rem;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.prose-container {
+  width: 100%;
+  max-width: var(--max-content-width);
+}
+
+.toc-wrapper {
+  width: var(--toc-width);
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-color);
+  padding: 3rem 1.5rem;
+  position: sticky;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  background-color: var(--bg-color);
+  transition: border-color 0.2s ease;
+}
+
+/* ==========================================================================
+   Typography & Markdown Styles
+   ========================================================================== */
+
+.prose-container h1 {
+  font-family: var(--font-serif);
+  font-size: 2.3rem;
+  font-weight: 500;
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.prose-container h2 {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 500;
+  color: var(--accent-color);
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border-color);
+  line-height: 1.35;
+}
+
+.prose-container h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--accent-color);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.prose-container p {
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+  text-align: justify;
+}
+
+.prose-container ul, .prose-container ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  color: var(--text-color);
+}
+
+.prose-container li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-container strong {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.prose-container hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 3rem 0;
+}
+
+.prose-container blockquote {
+  border-left: 4px solid var(--quote-border);
+  padding: 0.75rem 1.25rem;
+  color: var(--text-muted);
+  background-color: var(--quote-bg);
+  margin: 1.5rem 0;
+  font-family: var(--font-serif);
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+/* インラインコード */
+.prose-container code {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  border: 1px solid var(--border-color);
+}
+
+/* コードブロック */
+.prose-container pre {
+  background-color: var(--code-bg) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+}
+
+.prose-container pre.shiki {
+  background-color: var(--code-bg) !important;
+}
+
+.prose-container pre code {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.prose-container pre code span {
+  color: var(--shiki-light);
+}
+.dark .prose-container pre code span {
+  color: var(--shiki-dark) !important;
+}
+
+/* コピーボタン */
+.copy-code-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.15s ease;
+  z-index: 10;
+  font-family: var(--font-sans);
+}
+
+pre:hover .copy-code-btn {
+  opacity: 1;
+}
+
+.copy-code-btn:hover {
+  background-color: var(--accent-light);
+  color: var(--text-color);
+}
+
+.copy-code-btn.copied {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.copy-icon {
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Special Components Styles (コラム、図、テーブル)
+   ========================================================================== */
+
+/* コラム・補足枠 (.note-box) */
+.note-box {
+  background-color: var(--quote-bg);
+  border-left: 4px solid var(--accent-color);
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  font-family: var(--font-sans);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.note-box p {
+  margin-bottom: 0;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.note-box p + p {
+  margin-top: 0.75rem;
+}
+
+/* 図・ダイアグラムコンテナ (.diagram-container) */
+.diagram-container {
+  background-color: var(--bg-color);
+  background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+  background-size: 16px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+  overflow-x: auto;
+}
+
+.dark .diagram-container {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* レスポンシブテーブル */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 2rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  text-align: left;
+  background-color: var(--bg-color);
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--accent-light);
+  color: var(--accent-color);
+  font-weight: 600;
+  font-family: var(--font-sans);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* スマホ表示でのテーブルの縦並びカード化 (responsive-card-table) */
+@media (max-width: 600px) {
+  .responsive-card-table table,
+  .responsive-card-table thead,
+  .responsive-card-table tbody,
+  .responsive-card-table th,
+  .responsive-card-table td,
+  .responsive-card-table tr {
+    display: block;
+  }
+
+  .responsive-card-table thead {
+    display: none; /* ヘッダーを非表示 */
+  }
+
+  .responsive-card-table tr {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: var(--quote-bg);
+  }
+
+  .responsive-card-table td {
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    padding-left: 45%;
+    text-align: right;
+  }
+
+  .responsive-card-table td:last-child {
+    border-bottom: none;
+  }
+
+  .responsive-card-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    font-weight: 600;
+    color: var(--accent-color);
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+  }
+}
+
+/* 横スクロール用の単純なコンテナ (responsive-simple-table) */
+.responsive-simple-table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ==========================================================================
+   Print Styles (印刷対応)
+   ========================================================================== */
+
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  .sidebar-container,
+  .app-header,
+  .toc-wrapper,
+  .article-navigation,
+  .menu-toggle-btn,
+  .theme-toggle-btn,
+  .copy-code-btn,
+  .sidebar-overlay {
+    display: none !important;
+  }
+
+  .main-container {
+    margin-left: 0 !important;
+  }
+
+  .content-wrapper {
+    padding: 0 !important;
+  }
+
+  .prose-container {
+    max-width: 100% !important;
+  }
+
+  .prose-container h1,
+  .prose-container h2,
+  .prose-container h3 {
+    color: #000000 !important;
+    page-break-after: avoid;
+  }
+
+  .prose-container pre,
+  .prose-container code {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  blockquote, .note-box, .focus-card {
+    background: #ffffff !important;
+    border-left: 3px solid #000000 !important;
+    color: #000000 !important;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+}
+
+/* ==========================================================================
+   Responsive & Overlays
+   ========================================================================== */
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(1px);
+  z-index: 80;
+}
+
+@media (max-width: 1100px) {
+  .toc-wrapper {
+    display: none; /* タブレット以下は右目次非表示 */
+  }
+}
+
+@media (max-width: 900px) {
+  .main-container {
+    margin-left: 0;
+  }
+
+  .app-header {
+    padding: 0 1rem;
+  }
+
+  .menu-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content-wrapper {
+    padding: 2rem 1.25rem;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  body.sidebar-open {
+    overflow: hidden;
+  }
+}
