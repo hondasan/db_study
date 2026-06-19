@@ -5,6 +5,7 @@
 :root {
   /* 配色 (Warm Cream & Ink Blue) */
   --bg-color: #FAF9F5;       /* 背景色（ウォームクリーム） */
+  --bg-hover: #EFECE6;       /* 少し濃い背景色（ホバー用等） */
   --text-color: #2A2A2A;     /* 通常文字色（チャコール） */
   --text-muted: #6B6B6B;     /* 補足用文字色（グレー） */
   --accent-color: #1E3A60;   /* アクセント・見出し色（インクブルー） */
@@ -33,6 +34,7 @@
 /* ダークモード (Warm Cream & Ink Blueの配色調和を維持) */
 .dark {
   --bg-color: #161513;       /* 非常に暗いウォームグレー */
+  --bg-hover: #1E1C19;       /* 少し明るいウォームグレー */
   --text-color: #E2E0D9;     /* 明るいアイボリー */
   --text-muted: #8E8A83;
   --accent-color: #8EB3E2;   /* 明るいインクブルー */
