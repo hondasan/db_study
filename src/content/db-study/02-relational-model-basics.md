@@ -56,6 +56,62 @@ category: "データベースの基礎"
 
 この独立性を実現するため、データベースの構造は以下の3つの階層（スキーマ）に分けて管理される。
 
+<div class="diagram-container">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" width="100%" height="auto" style="max-width: 500px;">
+    <!-- 各層のラベル背景 -->
+    <!-- 外部スキーマ -->
+    <rect x="10" y="10" width="480" height="70" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
+    <text x="25" y="48" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">外部スキーマ (ビュー)</text>
+    
+    <!-- アプリ & ビュー項目 -->
+    <rect x="150" y="25" width="85" height="40" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)" stroke-width="1"/>
+    <text x="192.5" y="49" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">アプリ A (ビュー 1)</text>
+
+    <rect x="265" y="25" width="85" height="40" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)" stroke-width="1"/>
+    <text x="307.5" y="49" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">アプリ B (ビュー 2)</text>
+
+    <!-- 矢印 -->
+    <path d="M 192.5 75 L 220 100" fill="none" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#arrow)"/>
+    <path d="M 307.5 75 L 280 100" fill="none" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <!-- 論理スキーマ -->
+    <rect x="10" y="105" width="480" height="85" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
+    <text x="25" y="145" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">論理スキーマ (テーブル)</text>
+
+    <!-- 論理テーブル関係 -->
+    <rect x="150" y="125" width="80" height="45" rx="2" fill="var(--accent-light)" stroke="var(--accent-color)" stroke-width="1.5"/>
+    <text x="190" y="152" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">artists</text>
+    
+    <rect x="270" y="125" width="80" height="45" rx="2" fill="var(--accent-light)" stroke="var(--accent-color)" stroke-width="1.5"/>
+    <text x="310" y="152" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">albums</text>
+    
+    <line x1="230" y1="147" x2="270" y2="147" stroke="var(--accent-color)" stroke-width="1.5" stroke-dasharray="2 2" />
+
+    <!-- 矢印 -->
+    <path d="M 250 190 L 250 212" fill="none" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#arrow)"/>
+
+    <!-- 物理スキーマ -->
+    <rect x="10" y="215" width="480" height="95" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
+    <text x="25" y="255" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">物理スキーマ (ストレージ)</text>
+
+    <!-- 物理ファイル/インデックス -->
+    <rect x="130" y="238" width="110" height="50" rx="2" fill="var(--bg-primary)" stroke="var(--text-color)" stroke-width="1"/>
+    <text x="185" y="263" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">データファイル</text>
+    <text x="185" y="277" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">(物理ブロック/Heap)</text>
+
+    <rect x="260" y="238" width="110" height="50" rx="2" fill="var(--bg-primary)" stroke="var(--text-color)" stroke-width="1"/>
+    <text x="315" y="263" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">インデックス構造</text>
+    <text x="315" y="277" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">(B+ 木 / ハッシュ)</text>
+
+    <!-- マーカー -->
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)"/>
+      </marker>
+    </defs>
+  </svg>
+</div>
+
 1.  **物理スキーマ (Physical Schema)**: ファイル、ページなど、データがストレージにどのように物理的に保存・配置されるかの定義。
 2.  **論理スキーマ (Logical Schema)**: テーブル、列、データ型、プライマリキーなど、データの論理的な構造の定義。
 3.  **外部スキーマ / ビュー (External Schema / View)**: 特定のアプリケーション向けに論理スキーマをさらに抽象化し、一部を隠蔽・公開する層。
