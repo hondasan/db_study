@@ -28,7 +28,7 @@ category: "データベースの基礎"
 </div>
 
 <div class="diagram-container">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="auto" style="max-width: 600px;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="auto" style="width: 100%; max-width: 100%;">
     <!-- フラットファイル管理 (左半分) -->
     <text x="70" y="30" font-family="var(--font-sans)" font-size="14" font-weight="600" fill="var(--accent-color)">フラットファイル管理</text>
     <rect x="25" y="50" width="80" height="35" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>

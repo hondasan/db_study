@@ -36,7 +36,7 @@ category: "データベースの基礎"
 各演算子は1つ以上のリレーションを入力とし、新しいリレーションを出力する。これにより演算子を連結（チェーン）させることが可能である。
 
 <div class="diagram-container">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="auto" style="max-width: 600px;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="auto" style="width: 100%; max-width: 100%;">
     <!-- 定義（マーカーなど） -->
     <defs>
       <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
