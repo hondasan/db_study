@@ -31,52 +31,38 @@ category: "データベースの基礎"
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 240" width="100%" height="auto" style="max-width: 600px;">
     <!-- フラットファイル管理 (左半分) -->
     <text x="70" y="30" font-family="var(--font-sans)" font-size="14" font-weight="600" fill="var(--accent-color)">フラットファイル管理</text>
-    
     <rect x="25" y="50" width="80" height="35" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
     <text x="65" y="72" font-family="var(--font-sans)" font-size="11" fill="var(--text-color)" text-anchor="middle">アプリ A</text>
-    
     <rect x="135" y="50" width="80" height="35" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
     <text x="175" y="72" font-family="var(--font-sans)" font-size="11" fill="var(--text-color)" text-anchor="middle">アプリ B</text>
-
     <!-- 矢印 -->
     <path d="M 65 85 L 65 140" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow)"/>
     <path d="M 175 85 L 175 140" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow)"/>
-
     <!-- ファイル -->
     <rect x="25" y="148" width="80" height="46" rx="2" fill="none" stroke="var(--text-color)" stroke-width="1.5"/>
     <text x="65" y="170" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">users.csv</text>
     <text x="65" y="184" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">(独自パース)</text>
-    
     <rect x="135" y="148" width="80" height="46" rx="2" fill="none" stroke="var(--text-color)" stroke-width="1.5"/>
     <text x="175" y="170" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">orders.csv</text>
     <text x="175" y="184" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">(独自パース)</text>
-
     <!-- 中央の区切り線 -->
     <line x1="280" y1="20" x2="280" y2="220" stroke="var(--border-color)" stroke-width="1" stroke-dasharray="4 4" />
-
     <!-- DBMS一元管理 (右半分) -->
     <text x="390" y="30" font-family="var(--font-sans)" font-size="14" font-weight="600" fill="var(--accent-color)">DBMSによる一元管理</text>
-    
     <rect x="330" y="50" width="80" height="35" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
     <text x="370" y="72" font-family="var(--font-sans)" font-size="11" fill="var(--text-color)" text-anchor="middle">アプリ A</text>
-    
     <rect x="440" y="50" width="80" height="35" rx="4" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
     <text x="480" y="72" font-family="var(--font-sans)" font-size="11" fill="var(--text-color)" text-anchor="middle">アプリ B</text>
-
     <!-- 矢印 (DBMSへ) -->
     <path d="M 370 85 L 405 115" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow)"/>
     <path d="M 480 85 L 445 115" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow)"/>
-
     <!-- DBMS -->
     <rect x="380" y="122" width="90" height="36" rx="6" fill="var(--accent-light)" stroke="var(--accent-color)" stroke-width="2"/>
     <text x="425" y="145" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--accent-color)" text-anchor="middle">DBMS</text>
-
     <path d="M 425 158 L 425 185" fill="none" stroke="var(--accent-color)" stroke-width="1.5" marker-end="url(#arrow)"/>
-
     <!-- データベースファイル -->
     <rect x="380" y="192" width="90" height="32" rx="2" fill="none" stroke="var(--text-color)" stroke-width="1.5"/>
     <text x="425" y="212" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">統合データベース</text>
-
     <!-- マーカー定義 -->
     <defs>
       <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">

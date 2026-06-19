@@ -62,18 +62,14 @@ category: "データベースの基礎"
     <!-- 外部スキーマ -->
     <rect x="10" y="10" width="480" height="70" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="25" y="48" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">外部スキーマ (ビュー)</text>
-    
     <!-- アプリ & ビュー項目 -->
     <rect x="150" y="25" width="85" height="40" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="192.5" y="49" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">アプリ A (ビュー 1)</text>
-
     <rect x="265" y="25" width="85" height="40" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="307.5" y="49" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">アプリ B (ビュー 2)</text>
-
     <!-- 矢印 -->
     <path d="M 192.5 75 L 220 100" fill="none" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#arrow)"/>
     <path d="M 307.5 75 L 280 100" fill="none" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#arrow)"/>
-
     <!-- 論理スキーマ -->
     <rect x="10" y="105" width="480" height="85" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="25" y="145" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">論理スキーマ (テーブル)</text>

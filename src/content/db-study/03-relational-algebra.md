@@ -43,56 +43,44 @@ category: "データベースの基礎"
         <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-muted)"/>
       </marker>
     </defs>
-
     <!-- 1. 元のテーブル (左側) -->
     <text x="30" y="30" font-family="var(--font-sans)" font-size="12" font-weight="600" fill="var(--text-color)">元のテーブル (Relation)</text>
-    
     <!-- テーブル枠 -->
     <rect x="30" y="45" width="150" height="130" rx="4" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1.5"/>
-    
     <!-- ヘッダー行 -->
     <rect x="30" y="45" width="150" height="25" rx="4" fill="var(--accent-light)" stroke="var(--border-color)" stroke-width="1"/>
     <line x1="80" y1="45" x2="80" y2="175" stroke="var(--border-color)" stroke-width="1"/>
     <line x1="130" y1="45" x2="130" y2="175" stroke="var(--border-color)" stroke-width="1"/>
-    
     <!-- ヘッダーテキスト -->
     <text x="55" y="62" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">ID</text>
     <text x="105" y="62" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">Name</text>
     <text x="155" y="62" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">Age</text>
-
     <!-- データ行の区切り線 -->
     <line x1="30" y1="95" x2="180" y2="95" stroke="var(--border-color)" stroke-width="1"/>
     <line x1="30" y1="120" x2="180" y2="120" stroke="var(--border-color)" stroke-width="1"/>
     <line x1="30" y1="145" x2="180" y2="145" stroke="var(--border-color)" stroke-width="1"/>
-    
     <!-- データテキスト（一部ダミー） -->
     <text x="55" y="87" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">1</text>
     <text x="105" y="87" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">Alice</text>
     <text x="155" y="87" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">20</text>
-
     <!-- 選択される行（BobとDanielの行をハイライトして選択のデモに） -->
     <rect x="31" y="96" width="148" height="23" fill="var(--accent-light)" opacity="0.4"/>
     <text x="55" y="112" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">2</text>
     <text x="105" y="112" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">Bob</text>
     <text x="155" y="112" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">22</text>
-
     <!-- 射影される列（Name列をハイライトして射影のデモに。薄いグレーなどの透過背景を被せる） -->
     <rect x="81" y="46" width="48" height="128" fill="var(--text-muted)" opacity="0.15"/>
-
     <text x="55" y="137" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">3</text>
     <text x="105" y="137" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">Charlie</text>
     <text x="155" y="137" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">21</text>
-
     <rect x="31" y="146" width="148" height="28" fill="var(--accent-light)" opacity="0.4"/>
     <text x="55" y="162" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">4</text>
     <text x="105" y="162" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">Daniel</text>
     <text x="155" y="162" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">23</text>
-
     <!-- 2. 選択演算 (右上) -->
     <!-- 矢印 -->
     <path d="M 190 90 L 260 70" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow)"/>
     <text x="225" y="65" font-family="var(--font-sans)" font-size="9" fill="var(--text-muted)" text-anchor="middle">選択 (σ)</text>
-    
     <!-- 選択結果 -->
     <text x="280" y="30" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-color)">選択 (Select: σ_Age&gt;21)</text>
     <text x="280" y="43" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)">条件に合致する「行 (タプル)」を抽出する</text>
@@ -109,16 +97,13 @@ category: "データベースの基礎"
     <text x="305" y="83" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">2</text>
     <text x="355" y="83" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">Bob</text>
     <text x="405" y="83" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">22</text>
-
     <text x="305" y="103" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">4</text>
     <text x="355" y="103" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">Daniel</text>
     <text x="405" y="103" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">23</text>
-
     <!-- 3. 射影演算 (右下) -->
     <!-- 矢印 -->
     <path d="M 190 140 L 260 165" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow)"/>
     <text x="225" y="165" font-family="var(--font-sans)" font-size="9" fill="var(--text-muted)" text-anchor="middle">射影 (π)</text>
-
     <!-- 射影結果 -->
     <text x="280" y="145" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-color)">射影 (Projection: π_Name)</text>
     <text x="280" y="157" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)">指定した「列 (属性)」のみを抽出する</text>
@@ -130,12 +115,10 @@ category: "データベースの基礎"
     <line x1="280" y1="197" x2="350" y2="197" stroke="var(--border-color)" stroke-width="0.5"/>
     <line x1="280" y1="209" x2="350" y2="209" stroke="var(--border-color)" stroke-width="0.5"/>
     <line x1="280" y1="221" x2="350" y2="221" stroke="var(--border-color)" stroke-width="0.5"/>
-    
     <text x="315" y="193" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">Alice</text>
     <text x="315" y="205" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">Bob</text>
     <text x="315" y="217" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">Charlie</text>
     <text x="315" y="229" font-family="var(--font-sans)" font-size="8" fill="var(--text-color)" text-anchor="middle">Daniel</text>
-
   </svg>
 </div>
 
