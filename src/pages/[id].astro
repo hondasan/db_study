@@ -40,7 +40,7 @@ const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : nul
   <div class="article-navigation">
     <div class="nav-prev">
       {prevPost && (
-        <a href={`/${prevPost.id}`} class="nav-button">
+        <a href={`${import.meta.env.BASE_URL}${prevPost.id}`} class="nav-button">
           <span class="nav-label">&larr; 前の記事</span>
           <span class="nav-title">{prevPost.data.title}</span>
         </a>
@@ -48,7 +48,7 @@ const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : nul
     </div>
     <div class="nav-next">
       {nextPost && (
-        <a href={`/${nextPost.id}`} class="nav-button align-right">
+        <a href={`${import.meta.env.BASE_URL}${nextPost.id}`} class="nav-button align-right">
           <span class="nav-label">次の記事 &rarr;</span>
           <span class="nav-title">{nextPost.data.title}</span>
         </a>

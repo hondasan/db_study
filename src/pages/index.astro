@@ -41,7 +41,7 @@ const headings = [
     <div class="topic-list">
       {posts.map((post) => (
         <div class="topic-item">
-          <a href={`/${post.id}`} class="topic-title-link">
+          <a href={`${import.meta.env.BASE_URL}${post.id}`} class="topic-title-link">
             {post.data.title}
           </a>
           <p class="topic-description">{post.data.description}</p>
