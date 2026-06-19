@@ -1,0 +1,152 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('db-study');
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// 前後の記事へのリンク用のデータを取得
+const posts = await getCollection('db-study');
+posts.sort((a, b) => a.data.order - b.data.order);
+
+const currentIndex = posts.findIndex((p) => p.id === post.id);
+const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+---
+
+<Layout title={post.data.title} description={post.data.description} currentId={post.id}>
+  <Sidebar slot="sidebar" currentId={post.id} />
+
+  <div class="article-header">
+    <div class="article-meta">
+      <span class="category-badge">{post.data.category}</span>
+    </div>
+  </div>
+
+  <!-- Markdown本文がここに展開される -->
+  <Content />
+
+  <div class="article-navigation">
+    <div class="nav-prev">
+      {prevPost && (
+        <a href={`/${prevPost.id}`} class="nav-button">
+          <span class="nav-label">&larr; 前の記事</span>
+          <span class="nav-title">{prevPost.data.title}</span>
+        </a>
+      )}
+    </div>
+    <div class="nav-next">
+      {nextPost && (
+        <a href={`/${nextPost.id}`} class="nav-button align-right">
+          <span class="nav-label">次の記事 &rarr;</span>
+          <span class="nav-title">{nextPost.data.title}</span>
+        </a>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .article-header {
+    margin-bottom: 2rem;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .category-badge {
+    background-color: var(--accent-light);
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* 記事ナビゲーション（前後の記事へのリンク） */
+  .article-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .nav-prev, .nav-next {
+    flex: 1;
+    width: 50%;
+  }
+
+  .nav-button {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.25rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    height: 100%;
+  }
+
+  .nav-button:hover {
+    border-color: var(--accent-color);
+    background-color: var(--bg-tertiary);
+    transform: translateY(-2px);
+  }
+
+  .align-right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .nav-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+
+  .nav-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .nav-button:hover .nav-title {
+    color: var(--accent-color);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .article-navigation {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .nav-prev, .nav-next {
+      width: 100%;
+    }
+  }
+</style>

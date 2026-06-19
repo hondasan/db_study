@@ -1,0 +1,754 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  currentId?: string;
+}
+
+const { title, description = "データベースとSQLを体系的に学ぶ学習サイト", currentId } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} - db_study</title>
+    <!-- Google Fonts Inter & Noto Sans JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- サイドバーは別のコンポーネントにするが、レイアウト枠を定義 -->
+      <slot name="sidebar" />
+
+      <div class="main-container">
+        <header class="app-header">
+          <button id="menu-toggle" class="menu-toggle-btn" aria-label="メニューを開く">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          
+          <div class="header-logo">
+            <span class="logo-emoji">🗄️</span>
+            <span class="logo-text">db_study</span>
+          </div>
+
+          <div class="header-actions">
+            <!-- GitHub Link -->
+            <a href="https://github.com/hondasan/db_study" target="_blank" rel="noopener noreferrer" class="github-link" aria-label="GitHub Repository">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+            
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="テーマを切り替え">
+              <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+          </div>
+        </header>
+
+        <main class="content-wrapper">
+          <article class="prose-container">
+            <slot />
+          </article>
+        </main>
+
+        <!-- Claude風フローティングチャット風のデモSQL実行エリア -->
+        <footer class="app-footer">
+          <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+              <textarea 
+                id="sql-demo-input" 
+                placeholder="ここにSQLクエリを入力して実行をテストできます... (例: SELECT * FROM users;)" 
+                rows="1"
+              ></textarea>
+              <button id="sql-demo-submit" class="submit-btn" aria-label="クエリを実行">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+              </button>
+            </div>
+            <div id="sql-demo-output" class="sql-output-panel hidden">
+              <div class="output-header">
+                <span>📊 クエリ実行シミュレータ結果</span>
+                <button id="output-close-btn" class="close-btn">&times;</button>
+              </div>
+              <div class="output-content">
+                <pre><code id="output-code"></code></pre>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <!-- サイドバー用のモバイルオーバーレイ -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <script>
+      // テーマ管理
+      const getTheme = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+
+      const theme = getTheme();
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+
+      window.localStorage.setItem('theme', theme);
+
+      const handleToggleClick = () => {
+        const element = document.documentElement;
+        element.classList.toggle("dark");
+
+        const isDark = element.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      }
+
+      document.getElementById("theme-toggle")?.addEventListener("click", handleToggleClick);
+
+      // モバイルメニュー管理
+      const menuToggle = document.getElementById('menu-toggle');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+      
+      const toggleSidebar = () => {
+        document.querySelector('.sidebar-container')?.classList.toggle('open');
+        sidebarOverlay?.classList.toggle('active');
+        document.body.classList.toggle('sidebar-open');
+      };
+
+      menuToggle?.addEventListener('click', toggleSidebar);
+      sidebarOverlay?.addEventListener('click', toggleSidebar);
+
+      // テキストエリアの高さ自動調整
+      const textarea = document.getElementById('sql-demo-input') as HTMLTextAreaElement;
+      textarea?.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+      });
+
+      // SQL デモ実行シミュレーター
+      const sqlSubmit = document.getElementById('sql-demo-submit');
+      const sqlOutput = document.getElementById('sql-demo-output');
+      const outputCode = document.getElementById('output-code');
+      const outputClose = document.getElementById('output-close-btn');
+
+      const executeSQLDemo = () => {
+        const query = textarea.value.trim();
+        if (!query) return;
+
+        // モックデータ
+        let result = '';
+        const normalizedQuery = query.toLowerCase();
+
+        if (normalizedQuery.includes('select') && normalizedQuery.includes('users')) {
+          result = `| id | name   | email             | age | prefecture |\n|----|--------|-------------------|-----|------------|\n| 1  | Alice  | alice@example.com | 24  | 東京都     |\n| 2  | Bob    | bob@example.com   | 19  | 神奈川県   |\n| 3  | Charlie| charlie@gmail.com | 32  | 大阪府     |\n\n(3 rows in set)`;
+        } else if (normalizedQuery.includes('select') && normalizedQuery.includes('orders')) {
+          result = `| id | user_id | amount | order_date          |\n|----|---------|--------|---------------------|\n| 101| 1       | 5400   | 2026-06-15 10:30:00 |\n| 102| 3       | 12000  | 2026-06-18 15:45:00 |\n\n(2 rows in set)`;
+        } else if (normalizedQuery.includes('join')) {
+          result = `| id | name   | amount | order_date          |\n|----|--------|--------|---------------------|\n| 101| Alice  | 5400   | 2026-06-15 10:30:00 |\n| 102| Charlie| 12000  | 2026-06-18 15:45:00 |\n\n(2 rows in set)`;
+        } else if (query) {
+          result = `Query OK, 0 rows affected (0.01 sec)\n\n※このシミュレータはデモ用です。「users」または「orders」テーブルへのSELECT文、もしくはJOIN文を入力すると模擬データを表示します。`;
+        }
+
+        if (outputCode && sqlOutput) {
+          outputCode.textContent = result;
+          sqlOutput.classList.remove('hidden');
+        }
+      };
+
+      sqlSubmit?.addEventListener('click', executeSQLDemo);
+      textarea?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          executeSQLDemo();
+        }
+      });
+
+      outputClose?.addEventListener('click', () => {
+        sqlOutput?.classList.add('hidden');
+      });
+
+      // コードコピー機能
+      const setupCopyButtons = () => {
+        document.querySelectorAll('pre').forEach((pre) => {
+          // すでにコピーボタンがあるか、シミュレーター出力ならスキップ
+          if (pre.querySelector('.copy-code-btn') || pre.closest('#sql-demo-output')) return;
+
+          const button = document.createElement('button');
+          button.className = 'copy-code-btn';
+          button.type = 'button';
+          button.setAttribute('aria-label', 'コードをコピー');
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="copy-icon"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span class="copy-status">コピー</span>
+          `;
+
+          pre.style.position = 'relative';
+          pre.appendChild(button);
+
+          button.addEventListener('click', async () => {
+            const code = pre.querySelector('code');
+            if (!code) return;
+
+            try {
+              await navigator.clipboard.writeText(code.innerText);
+              button.classList.add('copied');
+              const statusEl = button.querySelector('.copy-status');
+              if (statusEl) statusEl.textContent = 'コピー完了';
+              
+              setTimeout(() => {
+                button.classList.remove('copied');
+                if (statusEl) statusEl.textContent = 'コピー';
+              }, 2000);
+            } catch (err) {
+              console.error('Failed to copy text: ', err);
+            }
+          });
+        });
+      };
+
+      // ページ読み込み完了時
+      setupCopyButtons();
+      document.addEventListener('astro:page-load', setupCopyButtons);
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* 共通のCSS変数とリセット */
+  :root {
+    --bg-primary: #FAF8F5; /* Claudeライクな温かみのある背景 */
+    --bg-secondary: #F4F0EB; /* サイドバー背景 */
+    --bg-tertiary: #EBE5DB;
+    
+    --text-primary: #191919;
+    --text-secondary: #5C5852;
+    --text-muted: #8E8A83;
+    
+    --border-color: #E6E0D5;
+    --border-hover: #D7CFC2;
+    
+    --accent-color: #D97706; /* コッパー/アンバー */
+    --accent-hover: #B45309;
+    --accent-light: #FEF3C7;
+    
+    --code-bg: #F5F2EC;
+    --code-text: #1E293B;
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    
+    --font-sans: 'Inter', 'Noto Sans JP', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Fira Code', monospace;
+    
+    --sidebar-width: 300px;
+    --header-height: 56px;
+    --footer-height: 100px;
+  }
+
+  .dark {
+    --bg-primary: #191919; /* 真っ黒すぎないClaudeのダーク背景 */
+    --bg-secondary: #202020;
+    --bg-tertiary: #2D2D2D;
+    
+    --text-primary: #E6E6E3;
+    --text-secondary: #A6A6A1;
+    --text-muted: #72726E;
+    
+    --border-color: #2F2F2F;
+    --border-hover: #3E3E3E;
+    
+    --accent-color: #F59E0B;
+    --accent-hover: #FBBF24;
+    --accent-light: #451A03;
+    
+    --code-bg: #222222;
+    --code-text: #E2E8F0;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    height: 100%;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* コピーボタンのスタイル */
+  .copy-code-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+
+  pre:hover .copy-code-btn {
+    opacity: 1;
+  }
+
+  .copy-code-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+  }
+
+  .copy-code-btn.copied {
+    background-color: var(--accent-light);
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+  }
+
+  .copy-icon {
+    flex-shrink: 0;
+  }
+
+  /* レイアウト定義 */
+  .app-container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .main-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin-left: var(--sidebar-width);
+    position: relative;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* ヘッダー */
+  .app-header {
+    height: var(--header-height);
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .menu-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .menu-toggle-btn:hover {
+    background-color: var(--bg-secondary);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+  }
+
+  .logo-emoji {
+    font-size: 1.25rem;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .github-link, .theme-toggle-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .github-link:hover, .theme-toggle-btn:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+  }
+
+  /* テーマアイコンの制御 */
+  .sun-icon {
+    display: block;
+  }
+  .moon-icon {
+    display: none;
+  }
+  .dark .sun-icon {
+    display: none;
+  }
+  .dark .moon-icon {
+    display: block;
+  }
+
+  /* メインコンテンツエリア */
+  .content-wrapper {
+    flex: 1;
+    padding: 2.5rem 2rem 8rem 2rem; /* 下部にチャットバーの隙間を空ける */
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+  }
+
+  .prose-container {
+    width: 100%;
+    max-width: 760px;
+    line-height: 1.75;
+  }
+
+  /* Markdownの基本スタイル (Claude風のすっきりしたタイポグラフィ) */
+  .prose-container h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.025em;
+  }
+
+  .prose-container h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--border-color);
+    letter-spacing: -0.015em;
+  }
+
+  .prose-container h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .prose-container p {
+    margin-bottom: 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  .prose-container ul, .prose-container ol {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .prose-container li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-container strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .prose-container hr {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 2.5rem 0;
+  }
+
+  .prose-container blockquote {
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    margin: 1.5rem 0;
+    background-color: var(--bg-secondary);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0 0.375rem 0.375rem 0;
+  }
+
+  /* コードブロックのカスタマイズ */
+  .prose-container pre {
+    background-color: var(--code-bg) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .prose-container pre.shiki {
+    background-color: var(--code-bg) !important;
+  }
+
+  /* Shikiマルチテーマのカラー制御 */
+  .prose-container pre code span {
+    color: var(--shiki-light);
+  }
+  .dark .prose-container pre code span {
+    color: var(--shiki-dark) !important;
+  }
+
+  .prose-container code {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    background-color: var(--code-bg);
+    color: var(--text-primary);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--border-color);
+  }
+
+  .prose-container pre code {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+  }
+
+  /* フッター & チャット入力欄 */
+  .app-footer {
+    position: fixed;
+    bottom: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(to top, var(--bg-primary) 70%, transparent);
+    z-index: 40;
+    transition: left 0.3s ease;
+  }
+
+  .chat-input-container {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .chat-input-wrapper {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.75rem 1.25rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s ease;
+  }
+
+  .chat-input-wrapper:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--bg-tertiary);
+  }
+
+  .chat-input-wrapper textarea {
+    flex: 1;
+    background: none;
+    border: none;
+    resize: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    max-height: 200px;
+    min-height: 24px;
+    line-height: 1.5;
+    padding-right: 1rem;
+  }
+
+  .chat-input-wrapper textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .submit-btn {
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    background-color: var(--accent-color);
+    transform: scale(1.05);
+  }
+
+  /* SQL シミュレータ出力パネル */
+  .sql-output-panel {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 0;
+    right: 0;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    z-index: 50;
+    animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .sql-output-panel.hidden {
+    display: none;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .output-header .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .output-header .close-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .output-content {
+    padding: 1.25rem;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  .output-content pre {
+    margin: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .output-content code {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    padding: 0;
+    white-space: pre-wrap;
+  }
+
+  /* モバイルオーバーレイ */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 80;
+  }
+
+  /* レスポンシブ */
+  @media (max-width: 900px) {
+    .main-container {
+      margin-left: 0;
+    }
+
+    .app-header {
+      padding: 0 1rem;
+    }
+
+    .menu-toggle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content-wrapper {
+      padding: 1.5rem 1rem 7.5rem 1rem;
+    }
+
+    .app-footer {
+      left: 0;
+      padding: 1rem;
+    }
+
+    .sidebar-overlay.active {
+      display: block;
+    }
+
+    body.sidebar-open {
+      overflow: hidden;
+    }
+  }
+</style>
