@@ -63,9 +63,9 @@ category: "データベースの基礎"
     <rect x="10" y="10" width="480" height="70" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="25" y="48" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">外部スキーマ (ビュー)</text>
     <!-- アプリ & ビュー項目 -->
-    <rect x="150" y="25" width="85" height="40" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)" stroke-width="1"/>
+    <rect x="150" y="25" width="85" height="40" rx="3" fill="var(--bg-color)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="192.5" y="49" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">アプリ A (ビュー 1)</text>
-    <rect x="265" y="25" width="85" height="40" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)" stroke-width="1"/>
+    <rect x="265" y="25" width="85" height="40" rx="3" fill="var(--bg-color)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="307.5" y="49" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">アプリ B (ビュー 2)</text>
     <!-- 矢印 -->
     <path d="M 192.5 75 L 220 100" fill="none" stroke="var(--text-muted)" stroke-width="1" marker-end="url(#arrow)"/>
@@ -85,10 +85,10 @@ category: "データベースの基礎"
     <rect x="10" y="215" width="480" height="95" rx="6" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1"/>
     <text x="25" y="255" font-family="var(--font-sans)" font-size="11" font-weight="600" fill="var(--text-muted)">物理スキーマ (ストレージ)</text>
     <!-- 物理ファイル/インデックス -->
-    <rect x="130" y="238" width="110" height="50" rx="2" fill="var(--bg-primary)" stroke="var(--text-color)" stroke-width="1"/>
+    <rect x="130" y="238" width="110" height="50" rx="2" fill="var(--bg-color)" stroke="var(--text-color)" stroke-width="1"/>
     <text x="185" y="263" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">データファイル</text>
     <text x="185" y="277" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">(物理ブロック/Heap)</text>
-    <rect x="260" y="238" width="110" height="50" rx="2" fill="var(--bg-primary)" stroke="var(--text-color)" stroke-width="1"/>
+    <rect x="260" y="238" width="110" height="50" rx="2" fill="var(--bg-color)" stroke="var(--text-color)" stroke-width="1"/>
     <text x="315" y="263" font-family="var(--font-sans)" font-size="10" fill="var(--text-color)" text-anchor="middle">インデックス構造</text>
     <text x="315" y="277" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">(B+ 木 / ハッシュ)</text>
     <!-- マーカー -->
