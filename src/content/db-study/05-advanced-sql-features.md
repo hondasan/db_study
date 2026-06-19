@@ -111,35 +111,27 @@ WHERE e.course_id = '15-445';</code></pre>
     </defs>
     <text x="100" y="30" font-family="var(--font-sans)" font-size="12" font-weight="600" fill="var(--text-color)" text-anchor="middle">先行テーブル (Left Table)</text>
     <rect x="40" y="50" width="120" height="130" rx="4" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1.5"/>
-    
     <!-- 行要素 -->
     <rect x="50" y="65" width="100" height="25" rx="3" fill="var(--accent-light)" stroke="var(--accent-color)" stroke-width="1"/>
     <text x="100" y="81" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">タプル 1 (ID: 101)</text>
-    
     <rect x="50" y="105" width="100" height="25" rx="3" fill="var(--accent-light)" stroke="var(--accent-color)" stroke-width="1"/>
     <text x="100" y="121" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">タプル 2 (ID: 102)</text>
-    
     <rect x="50" y="145" width="100" height="25" rx="3" fill="var(--accent-light)" stroke="var(--accent-color)" stroke-width="1"/>
     <text x="100" y="161" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">タプル 3 (ID: 103)</text>
-    
     <!-- パラメータ渡し矢印 -->
     <path d="M 155 77 L 270 100" fill="none" stroke="var(--accent-color)" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arrow-lateral)"/>
     <text x="215" y="75" font-family="var(--font-sans)" font-size="9" fill="var(--accent-color)" text-anchor="middle" transform="rotate(11, 215, 75)">Param: ID=101</text>
-    
     <!-- ラテラルサブクエリ (右) -->
     <text x="360" y="30" font-family="var(--font-sans)" font-size="12" font-weight="600" fill="var(--text-color)" text-anchor="middle">LATERAL サブクエリ</text>
     <rect x="280" y="50" width="160" height="130" rx="4" fill="var(--bg-hover)" stroke="var(--border-color)" stroke-width="1.5"/>
-    
     <!-- クエリ定義の表示 -->
     <rect x="290" y="65" width="140" height="100" rx="3" fill="none" stroke="var(--border-color)" stroke-width="1" stroke-dasharray="3,3"/>
     <text x="360" y="85" font-family="var(--font-sans)" font-size="9" font-weight="600" fill="var(--text-color)" text-anchor="middle">SELECT ... FROM ...</text>
     <text x="360" y="105" font-family="var(--font-sans)" font-size="9" fill="var(--text-color)" text-anchor="middle">WHERE student_id =</text>
     <text x="360" y="125" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--accent-color)" text-anchor="middle">LeftTable.ID</text>
     <text x="360" y="145" font-family="var(--font-sans)" font-size="9" fill="var(--text-muted)" text-anchor="middle">LIMIT 3</text>
-    
     <!-- 結合結果への出力 -->
     <path d="M 445 115 L 485 115" fill="none" stroke="var(--text-muted)" stroke-width="1.5" marker-end="url(#arrow-lateral)"/>
-    
     <!-- 出力 -->
     <text x="535" y="110" font-family="var(--font-sans)" font-size="10" font-weight="600" fill="var(--text-color)" text-anchor="middle">結合結果</text>
     <text x="535" y="125" font-family="var(--font-sans)" font-size="8" fill="var(--text-muted)" text-anchor="middle">行ごとの計算結果</text>
